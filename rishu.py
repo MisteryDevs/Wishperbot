@@ -13,7 +13,7 @@ from config import API_ID, API_HASH, BOT_TOKEN
 
 app = Client( "WhisperBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN )
 
-flask_app = Flask(name)
+flask_app = Flask(__name__)
 
 RANDOM_IMAGES = [ "https://files.catbox.moe/enzetg.jpg", "https://files.catbox.moe/lc46od.jpg", "https://files.catbox.moe/ee82s3.jpg", "https://files.catbox.moe/jygtws.jpg", "https://files.catbox.moe/gflfk1.jpg", "https://files.catbox.moe/6ppfre.jpg", "https://files.catbox.moe/sdtyi7.jpg", "https://files.catbox.moe/izkc8z.jpg" ]
 

@@ -19,7 +19,9 @@ RANDOM_IMAGES = [ "https://files.catbox.moe/enzetg.jpg", "https://files.catbox.m
 
 whisper_db = {}
 
-async def get_bot_username(): me = await app.get_me() return me.username
+async def get_bot_username():
+    me = await app.get_me()
+    return me.username
 
 @app.on_message(filters.command("start") & filters.private)
 async def start_message(_, message: Message):

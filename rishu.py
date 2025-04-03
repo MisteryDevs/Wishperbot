@@ -181,7 +181,9 @@ async def bot_inline(_, inline_query):
         answers = await _whisper(_, inline_query)
         await inline_query.answer(answers[-1], cache_time=0)
 
-@flask_app.route('/') def home(): return "Whisper Bot is Running!"
+@flask_app.route('/')
+def home():
+    return "Whisper Bot is Running!"
 
 def run_flask(): flask_app.run(host='0.0.0.0', port=8080)
 

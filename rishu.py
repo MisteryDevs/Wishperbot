@@ -187,5 +187,7 @@ def home():
 
 def run_flask(): flask_app.run(host='0.0.0.0', port=8080)
 
-if name == "main": Thread(target=run_flask).start() app.run()
+if __name__ == "__main__":
+    Thread(target=run_flask).start()
+    app.run()
 

@@ -1,4 +1,15 @@
-from pyrogram import Client, filters from pyrogram.types import ( InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, Message ) import random from flask import Flask from threading import Thread from config import API_ID, API_HASH, BOT_TOKEN
+from pyrogram import Client, filters
+from pyrogram.types import (
+    InlineQueryResultArticle, InputTextMessageContent,
+    InlineKeyboardMarkup, InlineKeyboardButton, Message
+)
+import random 
+from flask import Flask 
+from threading import Thread 
+
+from config import API_ID, API_HASH, BOT_TOKEN
+
+
 
 app = Client( "WhisperBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN )
 

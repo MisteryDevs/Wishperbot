@@ -14,8 +14,8 @@ MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://Krishna:pss968048@cluster0.4rf
 
 OWNER_ID = 5738579437
 
-FORCE_JOIN1 = "Nenobots"
-FORCE_JOIN2 = "Vip_robotz"
+FORCE_JOIN1 = "Rishucoder"
+FORCE_JOIN2 = "rishu_mood"
 
 app = Client( "WhisperBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN )
 

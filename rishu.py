@@ -3,6 +3,7 @@ from pyrogram.types import (
     InlineQueryResultArticle, InputTextMessageContent,
     InlineKeyboardMarkup, InlineKeyboardButton, Message
 )
+from pymongo import MongoClient
 import random 
 from flask import Flask 
 from threading import Thread 
@@ -27,34 +28,171 @@ async def get_bot_username():
     me = await app.get_me()
     return me.username
 
+async def is_admin(client, chat_id, user_id):
+    async for member in client.get_chat_members(chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS):
+        if member.user.id == user_id:
+            return True
+    return False
+
+# New User Notification
+STICKERS = [
+    "CAACAgUAAxkBAAENygdnrrSuukBGTLd_k2q-kPf80pPMqgAClw0AAmdr-Fcu4b8ZzcizqDYE",
+    "CAACAgUAAxkBAAENygtnrrVXr5zEE-h_eiG8lRUkRkMwfwACExMAAjRk6VbUUzZjByHDfzYE",
+    "CAACAgUAAxkBAAEN5DBnvSPr9qQMqsdEnDDRP-imKi5dQQACLhMAAuC0gFVXNUFTYLnPgzYE",
+
+"CAACAgUAAxkBAAEN5DFnvSPrXLlJIqpci9G9DLlYo-N9sQAC7xYAAmNogVVdydtoPbvZ3DYE",
+
+"CAACAgUAAxkBAAEN5DJnvSPrBKiEnBsXYV-cPA0NNFPWxAAC9xEAAleLgFUHZXfeMQ2XIjYE",
+
+"CAACAgUAAxkBAAEN5DtnvSjlPXpQ9p4e7NnjcQ8u9D02ZgACmxQAAq38gVVMR2r-x8yK7jYE",
+
+"CAACAgUAAxkBAAEN5D1nvSjrBVYlBio74f8n2CDj_I0sEwACixYAAotv6VVIuORutfwQczYE",
+
+"CAACAgUAAxkBAAEN5D9nvSjuUsbAf8LQ1KaU5PsfR3CJcwACmhEAAqFq6FUaXZOdkV85bDYE",
+
+"CAACAgUAAxkBAAEN5EFnvSj0My9zoTWkmtIiL8D6vOReAAO_EQACvC_pVfIqri8bdMRBNgQ",
+
+"CAACAgUAAxkBAAEN5ENnvSj6VnxialvLOmfRL7yZx-Q9HgACbhQAAhfA8FWBN9ZyZA5LuTYE",
+
+"CAACAgUAAxkBAAEN5EVnvSkQhPZHx-aPu_79kWLtFKCnYwACAREAArvxgVUYx9DFORkVmjYE",
+
+"CAACAgUAAxkBAAEN5EdnvSkak4zQxNnvMO76ZVlsXQhz7AACJhQAAoWcgVVYjdtsjmF0czYE"
+]
+
+# Random Images
+RANDOM_IMAGES = [
+            "https://graph.org/file/f76fd86d1936d45a63c64.jpg",
+        "https://graph.org/file/69ba894371860cd22d92e.jpg",
+        "https://graph.org/file/67fde88d8c3aa8327d363.jpg",
+        "https://graph.org/file/3a400f1f32fc381913061.jpg",
+        "https://graph.org/file/a0893f3a1e6777f6de821.jpg",
+        "https://graph.org/file/5a285fc0124657c7b7a0b.jpg",
+        "https://graph.org/file/25e215c4602b241b66829.jpg",
+        "https://graph.org/file/a13e9733afdad69720d67.jpg",
+        "https://graph.org/file/692e89f8fe20554e7a139.jpg",
+        "https://graph.org/file/db277a7810a3f65d92f22.jpg",
+        "https://graph.org/file/a00f89c5aa75735896e0f.jpg",
+        "https://graph.org/file/f86b71018196c5cfe7344.jpg",
+        "https://graph.org/file/a3db9af88f25bb1b99325.jpg",
+        "https://graph.org/file/5b344a55f3d5199b63fa5.jpg",
+        "https://graph.org/file/84de4b440300297a8ecb3.jpg",
+        "https://graph.org/file/84e84ff778b045879d24f.jpg",
+        "https://graph.org/file/a4a8f0e5c0e6b18249ffc.jpg",
+        "https://graph.org/file/ed92cada78099c9c3a4f7.jpg",
+        "https://graph.org/file/d6360613d0fa7a9d2f90b.jpg",
+        "https://graph.org/file/37248e7bdff70c662a702.jpg",
+        "https://graph.org/file/0bfe29d15e918917d1305.jpg",
+        "https://graph.org/file/16b1a2828cc507f8048bd.jpg",
+        "https://graph.org/file/e6b01f23f2871e128dad8.jpg",
+        "https://graph.org/file/cacbdddee77784d9ed2b7.jpg",
+        "https://graph.org/file/ddc5d6ec1c33276507b19.jpg",
+        "https://graph.org/file/39d7277189360d2c85b62.jpg",
+        "https://graph.org/file/5846b9214eaf12c3ed100.jpg",
+        "https://graph.org/file/ad4f9beb4d526e6615e18.jpg",
+        "https://graph.org/file/3514efaabe774e4f181f2.jpg",
+]
+
+async def check_force_join(user_id):
+    """Check if the user is a member of both required channels."""
+    try:
+        await app.get_chat_member(FORCE_JOIN1, user_id)
+        await app.get_chat_member(FORCE_JOIN2, user_id)
+        return True
+    except UserNotParticipant:
+        return False
+    except RPCError as e:
+        logging.warning(f"Error checking force join for {user_id}: {e}")
+        return False
+
 @app.on_message(filters.command("start") & filters.private)
-async def start_message(_, message: Message):
-    bot_username = await get_bot_username()
-    welcome_text = (
-        "╔══════════════════════╗\n"
-        "       ✨ **Welcome to Whisper Bot!** ✨\n"
-        "╚══════════════════════╝\n\n"
-        "🌟 **About This Bot:**\n"
-        "This bot allows you to send secret whispers to other users. "
-        "Only the intended recipient can read your message!\n\n"
-        "📜 **How to Use:**\n"
-        "1. Use the button below to start a whisper.\n"
-        "2. Select a chat (user or group) to send the whisper.\n"
-        "3. Enter your message, and the recipient will receive a notification.\n\n"
-        "🎉 **Get Started Now!**\n"
-        "Click the button below to send your first whisper!"
-    )
+async def start_command(client, message: Message):
+    user = message.from_user
+    user_id = user.id
+    username = f"@{user.username}" if user.username else "No Username"
 
-    # Select a random image URL
+    # Force join check
+    if not await check_force_join(user_id):
+        return await message.reply_text(
+            "**❌ You must join our channels first!**",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🍬 Join 🍬", url=f"https://t.me/{FORCE_JOIN1}")],
+                [InlineKeyboardButton("🍬 Join 🍬", url=f"https://t.me/{FORCE_JOIN2}")]
+            ])
+        )
+
+    # Start Progress Animation
+    baby = await message.reply_text("[□□□□□□□□□□] 0%")
+    progress = [
+        "[■□□□□□□□□□] 10%", "[■■□□□□□□□□] 20%", "[■■■□□□□□□□] 30%",
+        "[■■■■□□□□□□] 40%", "[■■■■■□□□□□] 50%", "[■■■■■■□□□□] 60%",
+        "[■■■■■■■□□□] 70%", "[■■■■■■■■□□] 80%", "[■■■■■■■■■□] 90%",
+        "[■■■■■■■■■■] 100%"
+    ]
+    for step in progress:
+        await baby.edit_text(f"**{step}**")
+        await asyncio.sleep(0.2)
+
+    await baby.edit_text("**❖ Jᴀʏ Sʜʀᴇᴇ Rᴀᴍ 🚩...**")
+    await asyncio.sleep(2)
+
+    # Send a Random Sticker
+    try:
+        random_sticker = random.choice(STICKERS)
+        sticker_msg = await message.reply_sticker(random_sticker)
+        await asyncio.sleep(2)
+        await sticker_msg.delete()
+    except Exception as e:
+        print(f"Sticker send failed: {e}")
+
+    await asyncio.sleep(1)
+
+    # Delete progress message
+    try:
+        await baby.delete()
+    except Exception as e:
+        print(f"Failed to delete progress message: {e}")
+
+    # MongoDB Check & Insert New User
+    try:
+        existing_user = users_col.find_one({"_id": user_id})
+        if not existing_user:
+            users_col.insert_one({"_id": user_id, "username": user.username})
+            total_users = users_col.count_documents({})
+            # Send Notification to Owner
+            await app.send_message(
+                OWNER_ID, 
+                f"**New User Alert!**\n👤 **User:** {user.mention}\n"
+                f"🆔 **ID:** `{user_id}`\n📛 **Username:** {username}\n"
+                f"📊 **Total Users:** `{total_users}`"
+            )
+    except Exception as e:
+        print(f"MongoDB Error: {e}")
+
+    # Send a Random Image
     random_image = random.choice(RANDOM_IMAGES)
-
-    # Send the image with the caption and button
     await message.reply_photo(
         photo=random_image,
-        caption=welcome_text,
-        reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("💒 sᴛᴀʀᴛ ᴡʜɪsᴘᴇʀ", switch_inline_query="")]]
-        )
+        caption=f"""**┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼──────•
+┆✦ » ʜᴇʏ {user.mention}
+└──────────────────────•
+
+✦ »  ɪ'ᴍ ᴀ ᴀᴅᴠᴀɴᴄᴇ ʙɪᴏ ʟɪɴᴋ ʀᴇsᴛʀɪᴄᴛɪᴏɴ ʙᴏᴛ .
+
+✦ » ᴛʜɪs ʙᴏᴛ ᴅᴇᴛᴇᴄᴛs ʟɪɴᴋs ᴀɴᴅ ᴜsᴇʀɴᴀᴍᴇ ɪɴ ᴜsᴇʀ ʙɪᴏs ᴀɴᴅ ʀᴇsᴛʀɪᴄᴛs ᴛʜᴇᴍ. 
+
+✦ » ᴄʜᴇᴄᴋ ᴍʏ ᴀʙɪʟɪᴛʏ, ɢɪᴠᴇ ᴍᴇ ᴘᴏᴡᴇʀs ᴀɴᴅ ꜱᴇᴇ ᴍᴀɢɪᴄ ɪɴ ɢʀᴏᴜᴘ. 
+
+•──────────────────────•
+❖ 𝐏ᴏᴡᴇʀᴇᴅ ʙʏ  ➪  [˹ ʀɪsʜυ ʙσᴛ ˼](https://t.me/Ur_rishu_143)
+•──────────────────────•**""",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("✙ ʌᴅᴅ ϻє ɪη ʏσυʀ ɢʀσυᴘ ✙", url=f"https://t.me/{client.me.username}?startgroup=true")],
+            [InlineKeyboardButton("˹ sυᴘᴘσʀᴛ ˼", url="http://t.me/TEAM_INDIANS_BOT"),
+             InlineKeyboardButton("˹ υᴘᴅᴧᴛєs ˼", url="http://t.me/ur_rishu_143")],
+            [InlineKeyboardButton("˹ ᴧʟʟ ʙσᴛ's ˼", url="https://t.me/Vip_robotz/4"),
+             InlineKeyboardButton("˹ ᴍᴜsɪᴄ ʙᴏᴛ ˼", url="https://t.me/SanataniiMusicBot")],
+            [InlineKeyboardButton("💒 sᴛᴀʀᴛ ᴡʜɪsᴘᴇʀ", switch_inline_query="")]
+        ])
     )
 
 async def _whisper(_, inline_query):

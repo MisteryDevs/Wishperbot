@@ -12,10 +12,9 @@ from threading import Thread
 
 from config import API_ID, API_HASH, BOT_TOKEN
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://Krishna:pss968048@cluster0.4rfuzro.mongodb.net/?retryWrites=true&w=majority")
-db = client["whisperbot"] 
-users_col = db["users"]
-
+client = MongoClient("mongodb+srv://Krishna:pss968048@cluster0.4rfuzro.mongodb.net/?retryWrites=true&w=majority")  # Replace with your MongoDB URI
+db = client["whisperbot"]  # Your database
+users_col = db["users"]    # Your collection
 OWNER_ID = 5738579437
 
 FORCE_JOIN1 = "Rishucoder"

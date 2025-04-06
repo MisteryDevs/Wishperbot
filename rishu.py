@@ -4,6 +4,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup, InlineKeyboardButton, Message
 )
 from pymongo import MongoClient
+from pyrogram.errors import UserNotParticipant
 import random 
 import asyncio
 import os

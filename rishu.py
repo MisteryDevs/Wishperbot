@@ -13,8 +13,7 @@ from threading import Thread
 from config import API_ID, API_HASH, BOT_TOKEN
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://Krishna:pss968048@cluster0.4rfuzro.mongodb.net/?retryWrites=true&w=majority")
-
-
+db = client["whisperbot"] 
 users_col = db["users"]
 
 OWNER_ID = 5738579437

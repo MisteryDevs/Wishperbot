@@ -9,13 +9,17 @@ from threading import Thread
 
 from config import API_ID, API_HASH, BOT_TOKEN
 
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://Krishna:pss968048@cluster0.4rfuzro.mongodb.net/?retryWrites=true&w=majority")
 
+OWNER_ID = 5738579437
+
+FORCE_JOIN1 = "Nenobots"
+FORCE_JOIN2 = "Vip_robotz"
 
 app = Client( "WhisperBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN )
 
 flask_app = Flask(__name__)
 
-RANDOM_IMAGES = [ "https://files.catbox.moe/enzetg.jpg", "https://files.catbox.moe/lc46od.jpg", "https://files.catbox.moe/ee82s3.jpg", "https://files.catbox.moe/jygtws.jpg", "https://files.catbox.moe/gflfk1.jpg", "https://files.catbox.moe/6ppfre.jpg", "https://files.catbox.moe/sdtyi7.jpg", "https://files.catbox.moe/izkc8z.jpg" ]
 
 whisper_db = {}
 

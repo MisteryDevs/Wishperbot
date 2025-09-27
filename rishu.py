@@ -13,18 +13,18 @@ from threading import Thread
 
 from config import API_ID, API_HASH, BOT_TOKEN
 
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "whisperbot")
-users_col = db["users"]
 
 client = MongoClient(MONGO_URI)
+db = client[DB_NAME]
+users_col = db["users"]
 
+# Bot & Owner settings
 OWNER_ID = int(os.getenv("OWNER_ID", 5738579437))
 
-FORCE_JOIN1 = os.getenv("FORCE_JOIN1")
-FORCE_JOIN2 = os.getenv("FORCE_JOIN2")
-
-app = Client( "WhisperBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN )
+FORCE_JOIN1 = os.getenv("FORCE_JOIN1", "Rishucoder")
+FORCE_JOIN2 = os.getenv("FORCE_JOIN2", "rishu_mood")
 
 flask_app = Flask(__name__)
 

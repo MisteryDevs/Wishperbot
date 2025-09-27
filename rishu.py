@@ -191,10 +191,10 @@ async def start_command(client, message: Message):
 •──────────────────────•**""",
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton("✙ ʌᴅᴅ ϻє ɪη ʏσυʀ ɢʀσυᴘ ✙", url=f"https://t.me/{client.me.username}?startgroup=true")],
-            [InlineKeyboardButton("˹ sυᴘᴘσʀᴛ ˼", url="http://t.me/TEAM_INDIANS_BOT"),
+            [InlineKeyboardButton("˹ sυᴘᴘσʀᴛ ˼", url="http://t.me/Ur_support07"),
              InlineKeyboardButton("˹ υᴘᴅᴧᴛєs ˼", url="http://t.me/ur_rishu_143")],
-            [InlineKeyboardButton("˹ ᴧʟʟ ʙσᴛ's ˼", url="https://t.me/Vip_robotz/4"),
-             InlineKeyboardButton("˹ ᴍᴜsɪᴄ ʙᴏᴛ ˼", url="https://t.me/SanataniiMusicBot")],
+            [InlineKeyboardButton("˹ ᴧʟʟ ʙσᴛ's ˼", url="https://t.me/Vip_robotz"),
+             InlineKeyboardButton("˹ ᴄʜᴀᴛʙᴏᴛ ˼", url="https://t.me/DikshaChatBot")],
             [InlineKeyboardButton("💒 sᴛᴀʀᴛ ᴡʜɪsᴘᴇʀ", switch_inline_query="")]
         ])
     )
@@ -210,7 +210,7 @@ async def _whisper(_, inline_query):
                 title="💒 ᴡʜɪsᴘᴇʀ",
                 description=f"@{bot_username} [ USERNAME | ID ] [ TEXT ]",
                 input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{bot_username} [ USERNAME | ID ] [ TEXT ]"),
-                thumb_url="https://files.catbox.moe/mtrkt5.jpg",
+                thumb_url="https://graph.org/file/19df4696f3bc720d48f1e-398099f9d613749dd1.jpg",
                 reply_markup=InlineKeyboardMarkup(
                     [[InlineKeyboardButton("💒 sᴛᴀʀᴛ ᴡʜɪsᴘᴇʀ", switch_inline_query="")]]
                 )
@@ -231,7 +231,7 @@ async def _whisper(_, inline_query):
                     title="💒 ᴡʜɪsᴘᴇʀ",
                     description="ɪɴᴠᴀʟɪᴅ ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ɪᴅ!",
                     input_message_content=InputTextMessageContent("ɪɴᴠᴀʟɪᴅ ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ɪᴅ!"),
-                    thumb_url="https://files.catbox.moe/mtrkt5.jpg",
+                    thumb_url="https://graph.org/file/19df4696f3bc720d48f1e-398099f9d613749dd1.jpg",
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("💒 sᴛᴀʀᴛ ᴡʜɪsᴘᴇʀ", switch_inline_query="")]]
                     )
@@ -246,14 +246,14 @@ async def _whisper(_, inline_query):
                     title="💒 �ᴡʜɪsᴘᴇʀ",
                     description=f"sᴇɴᴅ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ @{user.username}" if user.username else f"sᴇɴᴅ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ {user.first_name}",
                     input_message_content=InputTextMessageContent(f"💒 ʏᴏᴜ ᴀʀᴇ sᴇɴᴅɪɴɢ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ @{user.username}" if user.username else f"sᴇɴᴅ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ {user.first_name}.\n\nᴛʏᴘᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ/sᴇɴᴛᴇɴᴄᴇ."),
-                    thumb_url="https://files.catbox.moe/mtrkt5.jpg",
+                    thumb_url="https://graph.org/file/19df4696f3bc720d48f1e-398099f9d613749dd1.jpg",
                     reply_markup=whisper_btn
                 ),
                 InlineQueryResultArticle(
                     title="🔩 ᴏɴᴇ-ᴛɪᴍᴇ ᴡʜɪsᴘᴇʀ",
                     description=f"sᴇɴᴅ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ @{user.username}" if user.username else f"sᴇɴᴅ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ {user.first_name}",
                     input_message_content=InputTextMessageContent(f"🔩 ʏᴏᴜ ᴀʀᴇ sᴇɴᴅɪɴɢ ᴀ ᴏɴᴇ-ᴛɪᴍᴇ ᴡʜɪsᴘᴇʀ ᴛᴏ @{user.username}" if user.username else f"sᴇɴᴅ ᴀ ᴡʜɪsᴘᴇʀ ᴛᴏ {user.first_name}.\n\nᴛʏᴘᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ/sᴇɴᴛᴇɴᴄᴇ."),
-                    thumb_url="https://files.catbox.moe/mtrkt5.jpg",
+                    thumb_url="https://graph.org/file/19df4696f3bc720d48f1e-398099f9d613749dd1.jpg",
                     reply_markup=one_time_whisper_btn
                 )
             ]
@@ -307,7 +307,7 @@ async def in_help():
             title="💒 ᴡʜɪsᴘᴇʀ",
             description=f"@{bot_username} [USERNAME | ID] [TEXT]",
             input_message_content=InputTextMessageContent(f"**📍ᴜsᴀɢᴇ:**\n\n@{bot_username} (ᴛᴀʀɢᴇᴛ ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ɪᴅ) (ʏᴏᴜʀ ᴍᴇssᴀɢᴇ).\n\n**ᴇxᴀᴍᴘʟᴇ:**\n@{bot_username} @username I Love You"),
-            thumb_url="https://files.catbox.moe/mtrkt5.jpg",
+            thumb_url="https://graph.org/file/19df4696f3bc720d48f1e-398099f9d613749dd1.jpg",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("💒 sᴛᴀʀᴛ ᴡʜɪsᴘᴇʀ", switch_inline_query="")]]
             )
